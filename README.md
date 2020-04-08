@@ -38,6 +38,11 @@ run <connection index> <task index>
 
 Connections and tasks are indexed in the order they are declared in a rain script. In our example, server will have a connection index of `0` and server2 will have a connection index of `1`. Similarly, the task that outputs "Hello" will have a task index of `0` and the task that outputs "World" will have a task index of `1`.
 
+If you save the above script as `example.rain`, you can execute it using rainbow:
+```
+rainbow example.rain
+```
+
 ## Footnotes
 Cover image: "Rainbow Lorikeet with Red Silk Cotton Flowers" By <a href="//commons.wikimedia.org/wiki/User:Bald_white_guy" title="User:Bald white guy">Andrew Mercer</a> <a rel="nofollow" class="external text" href="http://www.baldwhiteguy.co.nz">(www.baldwhiteguy.co.nz)</a> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by-sa/4.0" title="Creative Commons Attribution-Share Alike 4.0">CC BY-SA 4.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=81752198">Link</a>
 
