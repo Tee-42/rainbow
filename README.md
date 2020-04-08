@@ -1,8 +1,18 @@
 # Rainbow
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Claude_Monet_%28French_-_Still_Life_with_Flowers_and_Fruit_-_Google_Art_Project.jpg/482px-Claude_Monet_%28French_-_Still_Life_with_Flowers_and_Fruit_-_Google_Art_Project.jpg" width="20%"/>
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Rainbow is a tool that lets you easily run repetitive or tedious batch jobs across your cluster.
+
+## Installing from source code
+
+Rainbow has almost no dependencies. It should build without issues on most POSIX compliant systems that have gcc and the pthread library. There is a makefile included in the repository that has been tested on Linux and Mac OS X. The default target builds rainbow in the `bin` directory within the repository.
+
+```
+make
+```
+
+Super user privileges are not required for building rainbow but may be required for running it on some systems based on the privileges your ssh client needs.
 
 ## Usage
 
@@ -43,6 +53,5 @@ If you save the above script as `example.rain`, you can execute it using rainbow
 rainbow example.rain
 ```
 
-## Footnotes
-Cover image by Claude Monet, in the public domain.
-
+## Questions, patches and bug reports
+Github is the best place to contact regarding questions and issues. Rainbow is actively maintained.
