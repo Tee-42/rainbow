@@ -16,6 +16,6 @@ struct task_t {
 
 struct task_t *task_create(const char *cmd, const size_t n_cmd);
 
-void task_execute(const struct task_t *pt, const struct connection_t *pconn);
+void task_execute(struct task_t *pt, const struct connection_t *pconn);
 
 #endif /* TASK_H */

@@ -1,5 +1,8 @@
 #include "connection.h"
 
+#include <assert.h>
+#include <string.h>
+
 void connection_free(struct connection_t *pconn) {
   free(pconn->addr);
   free(pconn->opt);

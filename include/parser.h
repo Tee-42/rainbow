@@ -1,9 +1,12 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #define PARSER_BUF 1024
 
-enum cmd_type_t { CMD_CONNECT, CMD_TASK, CMD_RUN, CMD_INVALID };
+enum cmd_type_t { CMD_CONNECT, CMD_TASK, CMD_RUN, CMD_INVALID, CMD_NONE };
 
 struct cmd_run_t {
   size_t index_conn;
@@ -29,5 +32,7 @@ struct command_t {
   enum cmd_type_t type;
   union cmd_info_t info;
 };
+
+struct command_t parser_next(FILE *stream);
 
 #endif /* PARSER_H */

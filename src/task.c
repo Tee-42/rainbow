@@ -17,7 +17,7 @@ struct task_t *task_create(const char *cmd, const size_t n_cmd) {
   assert(pt != NULL);
 
   pt->cmd = strndup(cmd, n_cmd);
-  assert(pt->n_cmd != NULL);
+  assert(pt->cmd != NULL);
 
   pt->n_cmd = n_cmd;
 
@@ -30,7 +30,7 @@ struct task_t *task_create(const char *cmd, const size_t n_cmd) {
   return pt;
 }
 
-void task_execute(const struct task_t *pt, const struct connection_t *pconn) {
+void task_execute(struct task_t *pt, const struct connection_t *pconn) {
   size_t n_command = pt->n_cmd + pconn->n_opt + pconn->n_addr + 12;
 
   char *command = malloc(n_command);
@@ -46,13 +46,4 @@ void task_execute(const struct task_t *pt, const struct connection_t *pconn) {
   pt->state = STATE_FINISHED;
 
   free(command);
-}
-
-int main() {
-  char ssh_opt[] = "-i ~/rsa_key";
-  char server[] = "tirmazi@pi.int.seas.harvard.edu";
-  char task[] = "echo Hello >> chicken.chicken";
-
-  task_execute(server, strlen(server), ssh_opt, strlen(ssh_opt), task,
-               strlen(task));
 }

@@ -1,10 +1,88 @@
 #include "parser.h"
 
+#include <assert.h>
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
-static struct command_t parser_connect(const char *cmd, const size_t len) {
+static struct command_t parser_task(char *cmd, size_t len) {
+  struct command_t parsed_cmd;
+  parsed_cmd.type = CMD_INVALID;
+
+  if (len == 0) {
+    return parsed_cmd;
+  }
+
+  if (*cmd != ' ') {
+    return parsed_cmd;
+  }
+
+  ++cmd;
+  --len;
+
+  if (len == 0) {
+    return parsed_cmd;
+  }
+
+  parsed_cmd.type = CMD_TASK;
+
+  memset(parsed_cmd.info.task.cmd, '\0', PARSER_BUF);
+  strncpy(parsed_cmd.info.task.cmd, cmd, len);
+
+  return parsed_cmd;
+}
+
+static struct command_t parser_run(char *cmd, size_t len) {
+
+  struct command_t parsed_cmd;
+  parsed_cmd.type = CMD_INVALID;
+
+  if (len == 0) {
+    return parsed_cmd;
+  }
+
+  if (*cmd != ' ') {
+    return parsed_cmd;
+  }
+
+  ++cmd;
+  --len;
+
+  if (len == 0) {
+    return parsed_cmd;
+  }
+
+  size_t counter = 0;
+  while (cmd[counter] != ' ') {
+    if (counter >= len) {
+      return parsed_cmd;
+    }
+
+    ++counter;
+  }
+
+  /* TODO: atol is sloppy. Replace with strtol and proper error checking. */
+  char *temp = strndup(cmd, counter);
+  parsed_cmd.info.run.index_conn = atol(temp);
+  free(temp);
+
+  ++counter;
+  cmd += counter;
+  len -= counter;
+
+  if (len == 0) {
+    return parsed_cmd;
+  }
+
+  /* TODO: atol is sloppy. Replace with strtol and proper error checking. */
+  temp = strndup(cmd, len);
+  parsed_cmd.info.run.index_task = atol(temp);
+  free(temp);
+
+  parsed_cmd.type = CMD_RUN;
+  return parsed_cmd;
+}
+
+static struct command_t parser_connect(char *cmd, size_t len) {
   struct command_t parsed_cmd;
   parsed_cmd.type = CMD_INVALID;
 
@@ -54,7 +132,7 @@ static struct command_t parser_connect(const char *cmd, const size_t len) {
   return parsed_cmd;
 }
 
-struct command_t parser_next(void) {
+struct command_t parser_next(FILE *stream) {
 
   char *cmd = NULL;
   size_t len = 0;
@@ -64,10 +142,13 @@ struct command_t parser_next(void) {
   const size_t k_len_connect = 7;
   const size_t k_len_run = 3;
 
-  nread = getline(&cmd, &len, stdin);
+  struct command_t parsed_cmd;
+  parsed_cmd.type = CMD_INVALID;
+
+  nread = getline(&cmd, &len, stream);
 
   if (nread == -1) {
-    return false;
+    return parsed_cmd;
   }
 
   if (strncmp("connect", cmd, k_len_connect) == 0) {
@@ -79,10 +160,8 @@ struct command_t parser_next(void) {
   }
 
   if (strncmp("run", cmd, k_len_run) == 0) {
-    return parser_run(cmd + k_len_run, ken - k_len_run);
+    return parser_run(cmd + k_len_run, len - k_len_run);
   }
 
-  struct command_t cmd;
-  cmd.type = CMD_INVALID;
-  return cmd;
+  return parsed_cmd;
 }
