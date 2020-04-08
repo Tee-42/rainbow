@@ -3,7 +3,7 @@ CC=gcc
 INCLUDE=include/
 CFLAGS=-I $(INCLUDE) -Wall -Werror
 CC_CMD=$(CC) $(CFLAGS)
-LIB=
+LIB=-lpthread
 
 OBJ_DIR=obj
 BIN_DIR=bin
@@ -14,7 +14,7 @@ DEPS=$(srcs:.c=.d)
 
 all: dir_tgt rainbow
 
-rainbow: connection.o parser.o task.o interpreter.o 
+rainbow: connection.o parser.o task.o interpreter.o main.o
 	$(CC_CMD) $(^:%.o=$(OBJ_DIR)/%.o) -o $(BIN_DIR)/$@ $(LIB)
 
 %.o : %.c

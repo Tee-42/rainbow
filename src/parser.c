@@ -1,6 +1,7 @@
 #include "parser.h"
 
 #include <assert.h>
+#include <ctype.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -19,6 +20,11 @@ static struct command_t parser_task(char *cmd, size_t len) {
   ++cmd;
   --len;
 
+  /* remove trailing new line '\n', carriage return  etc. */
+  while (isspace(cmd[len - 1]) || cmd[len - 1] == '\0') {
+    --len;
+  }
+
   if (len == 0) {
     return parsed_cmd;
   }
@@ -26,6 +32,7 @@ static struct command_t parser_task(char *cmd, size_t len) {
   parsed_cmd.type = CMD_TASK;
 
   memset(parsed_cmd.info.task.cmd, '\0', PARSER_BUF);
+
   strncpy(parsed_cmd.info.task.cmd, cmd, len);
 
   return parsed_cmd;
@@ -68,6 +75,11 @@ static struct command_t parser_run(char *cmd, size_t len) {
   ++counter;
   cmd += counter;
   len -= counter;
+
+  /* remove trailing new line '\n', carriage return  etc. */
+  while (isspace(cmd[len - 1]) || cmd[len - 1] == '\0') {
+    --len;
+  }
 
   if (len == 0) {
     return parsed_cmd;
@@ -119,6 +131,10 @@ static struct command_t parser_connect(char *cmd, size_t len) {
   cmd += counter;
   len -= counter;
 
+  while (isspace(cmd[len - 1]) || cmd[len - 1] == '\0') {
+    --len;
+  }
+
   if (len == 0) {
     return parsed_cmd;
   }
@@ -129,6 +145,7 @@ static struct command_t parser_connect(char *cmd, size_t len) {
   assert(len < PARSER_BUF);
 
   strncpy(parsed_cmd.info.connect.opt, cmd, len);
+
   return parsed_cmd;
 }
 
@@ -148,6 +165,7 @@ static struct command_t parser_next(FILE *stream) {
   nread = getline(&cmd, &len, stream);
 
   if (nread == -1) {
+    parsed_cmd.type = CMD_NONE;
     return parsed_cmd;
   }
 

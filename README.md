@@ -11,12 +11,12 @@ You can automate your workload by writing a **rain** script tht rainbow executes
 ```
 connect user@server.com -i rsa_key
 connect user@server2.com -i rsa_key
-task echo "Hello" > out.txt
-task echo "World" >> out.txt
+task echo Hello > out.txt
+task echo World >> out.txt
+run 0 0
+run 0 1
+run 1 0
 run 1 1
-run 1 2
-run 2 1
-run 2 2
 ```
 
 The first two lines set up connections. The syntax of the `connect` command is as follows:
@@ -29,7 +29,7 @@ You can specify a host. Optionally, you can add any additional parameters you wa
 
 The next two lines register tasks you want to execute. Anything that follows the term `task` (and a space) is relayed directly to your servers. Note that the `task` command only registers a task, it does not execute it.
 
-The final four lines run task 1 on server, task 2 on server, task 1 on server2 and task2 on server2 (in that order). These are non-blocking calls, rainbow does not wait for a run's task to finish before initiating the next run. Rainbow informs you when each run completes. 
+The final four lines run task 0 on server, task 1 on server, task 0 on server2 and task 1 on server2 (in that order). These are non-blocking calls, rainbow does not wait for a run's task to finish before initiating the next run. Rainbow informs you when each run completes. 
 
 The `run` command has the following syntax:
 ```
