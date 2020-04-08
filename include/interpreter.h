@@ -12,4 +12,6 @@ struct interpreter_t {
   size_t n_task;
 };
 
+// struct interpreter_t *interpreter_create(void) {}
+
 #endif /* INTERPRETER_H */

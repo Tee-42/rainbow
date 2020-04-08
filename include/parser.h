@@ -1,6 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -33,6 +34,7 @@ struct command_t {
   union cmd_info_t info;
 };
 
-struct command_t parser_next(FILE *stream);
+bool parser_file(const char *filename, struct command_t **pcmd_arr,
+                 size_t *pn_cmd_arr);
 
 #endif /* PARSER_H */

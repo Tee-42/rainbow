@@ -132,7 +132,7 @@ static struct command_t parser_connect(char *cmd, size_t len) {
   return parsed_cmd;
 }
 
-struct command_t parser_next(FILE *stream) {
+static struct command_t parser_next(FILE *stream) {
 
   char *cmd = NULL;
   size_t len = 0;
@@ -164,4 +164,54 @@ struct command_t parser_next(FILE *stream) {
   }
 
   return parsed_cmd;
+}
+
+bool parser_file(const char *filename, struct command_t **pcmd_arr,
+                 size_t *pn_cmd_arr) {
+  FILE *pf;
+  if ((pf = fopen(filename, "r")) == NULL) {
+    fprintf(stderr, "Error opening rain script file.");
+    return false;
+  }
+
+  struct command_t *cmd_arr = NULL;
+  size_t n_cmd_arr = 0;
+
+  struct command_t cmd;
+
+  while (1) {
+    cmd = parser_next(pf);
+
+    if (cmd.type == CMD_NONE) {
+      break;
+    }
+
+    if (cmd.type == CMD_INVALID) {
+      fprintf(stderr, "Invalid command at line: %lu\n", n_cmd_arr + 1);
+      free(cmd_arr);
+      fclose(pf);
+      return false;
+    }
+
+    struct command_t *resized =
+        malloc(sizeof(struct command_t) * (n_cmd_arr + 1));
+    assert(resized != NULL);
+
+    if (cmd_arr != NULL) {
+      memcpy(resized, cmd_arr, sizeof(struct command_t) * n_cmd_arr);
+    }
+
+    resized[n_cmd_arr] = cmd;
+
+    free(cmd_arr);
+
+    cmd_arr = resized;
+    ++n_cmd_arr;
+  }
+
+  *pcmd_arr = cmd_arr;
+  *pn_cmd_arr = n_cmd_arr;
+
+  fclose(pf);
+  return true;
 }
