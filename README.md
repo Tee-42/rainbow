@@ -1,6 +1,6 @@
 # Rainbow
 
-<a src="https://upload.wikimedia.org/wikipedia/commons/2/29/Claude_Monet_%28French_-_Still_Life_with_Flowers_and_Fruit_-_Google_Art_Project.jpg" width="20%"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Claude_Monet_%28French_-_Still_Life_with_Flowers_and_Fruit_-_Google_Art_Project.jpg" width="20%"/>
 
 Rainbow is a tool that lets you easily run repetitive or tedious batch jobs across your cluster.
 
